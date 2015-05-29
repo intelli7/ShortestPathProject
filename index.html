@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <title>Data Structure Project</title>
+        <!-- bower:css -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="bower_components/bootstrap-material-design/dist/css/material.css" />
+        <link rel="stylesheet" href="bower_components/bootstrap-material-design/dist/css/ripples.css" />
+        <!-- endbower -->
+
+        <link rel="stylesheet" href="css/style.css" />
+
+        <!-- bower:js -->
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="bower_components/bootstrap-material-design/dist/js/material.js"></script>
+        <script src="bower_components/bootstrap-material-design/dist/js/ripples.js"></script>
+        <script src="bower_components/cytoscape/dist/cytoscape.js"></script>
+        <!-- endbower -->
+        
+        <script src="js/script.js"></script>
+    </head>
+<body>
+    <div class="container" ng-app="myApp" ng-controller="myCtrl">
+        <div class="row">
+                <div class="navbar navbar-inverse ">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="javascript:void(0)">{{appname}}</a>
+                </div>
+                <div class="navbar-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav navbar-nav">
+                        <li ng-repeat="x in menus" class="{{x.active}}" >
+                            <a href="#{{x.url}}" ng-click="tongglemenu(x)">{{x.title}}</a>
+                          </li>
+                    </ul>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Azrul Amir <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:void(0)">Action</a></li>
+                                <li><a href="javascript:void(0)">Another action</a></li>
+                                <li><a href="javascript:void(0)">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="javascript:void(0)">Separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+        </div>
+        
+        <div id="homepage" class="animate-show" ng-hide="homepage">
+            <div class="row">
+
+                <ul class="breadcrumb" style="margin-bottom: 5px;">
+                    <li><a href="javascript:void(0)">Home</a></li>
+                    <li><a href="javascript:void(0)">Library</a></li>
+                    <li class="active">Data</li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="jumbotron">
+                        <h1>Data Structure Project</h1>
+                        <h3>Mohd Azrul Amir Muhamad Tajudin (P75852)</h3>
+                        <p><a class="btn btn-primary btn-lg" href="#dij">Learn more</a></p>
+                    </div>
+                </div>
+            </div>
+
+
+                          
+        </div>
+        
+        <div id="dij" class="animate-show" ng-show="currentpage">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Panel primary</h3>
+                        </div>
+                        <div class="panel-body">
+                            Panel content
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="prim" class="animate-show" ng-show="currentpage == 'prim'">PRIM</div>
+        <div id="kruskal" class="animate-show" ng-show="currentpage == 'kruskal'">KRUSKAL</div>
+    </div>
+</body>
+
+    
+</html>
