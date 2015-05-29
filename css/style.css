@@ -1,0 +1,8 @@
+#cy {
+  position: relative;
+  left: 0;
+  min-height: 500;
+  min-width: 500;
+  max-height: 500;
+  overflow-y: scroll;
+}
