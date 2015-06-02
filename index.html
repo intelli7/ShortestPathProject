@@ -17,8 +17,9 @@
         <script src="bower_components/bootstrap-material-design/dist/js/ripples.js"></script>
         <script src="bower_components/cytoscape/dist/cytoscape.js"></script>
         <!-- endbower -->
-        
+        <script src="js/graph.js"></script>
         <script src="js/script.js"></script>
+        
     </head>
 <body>
     <div class="container" ng-app="myApp" ng-controller="myCtrl">
@@ -58,48 +59,135 @@
         </div>
         
         <div id="homepage" class="animate-show" ng-hide="homepage">
-            <div class="row">
-
-                <ul class="breadcrumb" style="margin-bottom: 5px;">
-                    <li><a href="javascript:void(0)">Home</a></li>
-                    <li><a href="javascript:void(0)">Library</a></li>
-                    <li class="active">Data</li>
-                </ul>
-            </div>
+            
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="jumbotron">
-                        <h1>Data Structure Project</h1>
-                        <h3>Mohd Azrul Amir Muhamad Tajudin (P75852)</h3>
-                        <p><a class="btn btn-primary btn-lg" href="#dij">Learn more</a></p>
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Preferences</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="jumbotron">
+                                        <h1>Data Structure Project</h1>
+                                        <h3>Mohd Azrul Amir Muhamad Tajudin <span class="label label-primary">P75852</span></h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <form class="form-horizontal">
+                                        <fieldset>
+                                            <legend>Node Parameter</legend>
+
+
+                                            <div class="form-group">
+                                                <label for="inputEmail" class="col-lg-3 control-label">Node List</label>
+                                                <div class="col-lg-9">
+                                                    <input type="text" id="inNode" class="form-control"  placeholder="Node List" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputEmail" class="col-lg-3 control-label">Edge Config</label>
+                                                <div class="col-lg-9">
+                                                    <textarea  class="form-control" rows="5" id="inEdge">
+
+                                                    </textarea>
+                                                </div>
+                                            </div>
+
+                                            <legend>Dijkstra Parameter</legend>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inputEmail" class="col-lg-6 control-label">Start Node</label>
+                                                        <div class="col-lg-6">
+                                                            <input type="text" class="form-control" id="inStart" placeholder="Source">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inputEmail" class="col-lg-6 control-label">End Node</label>
+                                                        <div class="col-lg-6">
+                                                            <input type="text" class="form-control" id="inEnd" placeholder="End">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+
+
+                                            <div class="form-group">
+                                                <div class="col-lg-10 col-lg-offset-2">
+                                                    <button class="btn btn-default  btn-raised">Reset</button>
+                                                    <button type="submit" class="btn btn-primary  btn-raised" id="btnSubmitDij">Submit</button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+
+                                </div>
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
             </div>
-
 
                           
         </div>
         
-        <div id="dij" class="animate-show">
+        
+        
+        <div class="animate-show">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-success">
+                <div class="col-md-4 col-xd-12 col-ld-12">
+                    <div class="panel panel-danger">
                         <div class="panel-heading">
                             <h3 class="panel-title">Dijkstra Algorithm</h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div id="cy" class="col-md-6"></div>
-                                <div class="col-md-6"></div>
+                                <div id="cy" class="cy col-md-12"></div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xd-12 col-ld-12">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Prim Algorithm</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div id="cyprim" class="col-md-12 cy"></div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xd-12 col-ld-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Kruskal Algorithm</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div id="cykruskal" class="col-md-12 cy"></div>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="prim" class="animate-show" ng-show="currentpage == 'prim'">PRIM</div>
-        <div id="kruskal" class="animate-show" ng-show="currentpage == 'kruskal'">KRUSKAL</div>
+        
+        
+        
+        
     </div>
 </body>
 
