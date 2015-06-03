@@ -26,11 +26,22 @@ $(document).ready(function(){
           style: cytoscape.stylesheet()
             .selector('node')
               .css({
-                'content': 'data(id)'
+                'content': 'data(id)',
+                  'text-valign': 'center',
+                  'font-size': '12',
+                  'color': 'white',
+                  'text-outline-width': 2,
+                    'text-outline-color': '#888'
               })
             .selector('edge')
               .css({
+                  'content': 'data(weight)',
+                  'font-size': '8',
+                  
+                  'text-opacity': '0.7',
+                'text-valign': 'center',
                 'target-arrow-shape': 'triangle',
+                  
                 'width': 1,
                 'line-color': '#ddd',
                 'line-style': 'dashed',
@@ -63,10 +74,17 @@ $(document).ready(function(){
           style: cytoscape.stylesheet()
             .selector('node')
               .css({
-                'content': 'data(id)'
+                'content': 'data(id)',
+                  'text-valign': 'center',
+                  'font-size': '12',
+                  'color': 'white',
+                  'text-outline-width': 2,
+                    'text-outline-color': '#888'
               })
             .selector('edge')
               .css({
+                  'content': 'data(weight)',
+                  'font-size': '8',
                 'target-arrow-shape': 'none',
                 'width': 1,
                 'line-color': '#ddd',
@@ -100,10 +118,17 @@ $(document).ready(function(){
           style: cytoscape.stylesheet()
             .selector('node')
               .css({
-                'content': 'data(id)'
+                'content': 'data(id)',
+                  'text-valign': 'center',
+                  'font-size': '12',
+                  'color': 'white',
+                  'text-outline-width': 2,
+                    'text-outline-color': '#888'
               })
             .selector('edge')
               .css({
+                  'content': 'data(weight)',
+                  'font-size': '8',
                 'target-arrow-shape': 'none',
                 'width': 1,
                 'line-color': '#ddd',
