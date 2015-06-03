@@ -33,6 +33,7 @@ $(document).ready(function(){
                 'target-arrow-shape': 'triangle',
                 'width': 1,
                 'line-color': '#ddd',
+                'line-style': 'dashed',
                 'target-arrow-color': '#ddd'
               })
             .selector('.highlighted')
@@ -41,6 +42,7 @@ $(document).ready(function(){
                 'line-color': '#61bffc',
                   'width': 3,
                 'target-arrow-color': '#61bffc',
+                  'line-style': 'solid',
                 'transition-property': 'background-color, line-color, target-arrow-color',
                 'transition-duration': '0.5s'
               }),
@@ -55,6 +57,79 @@ $(document).ready(function(){
           }
         });
 
+    var cyprim = cytoscape({
+          container: document.getElementById('cyprim'),
+
+          style: cytoscape.stylesheet()
+            .selector('node')
+              .css({
+                'content': 'data(id)'
+              })
+            .selector('edge')
+              .css({
+                'target-arrow-shape': 'none',
+                'width': 1,
+                'line-color': '#ddd',
+                  'line-style': 'dashed',
+                'target-arrow-color': '#ddd'
+              })
+            .selector('.highlighted')
+              .css({
+                'background-color': '#61bffc',
+                'line-color': '#61bffc',
+                  'width': 3,
+                  'line-style': 'solid',
+                'target-arrow-color': '#61bffc',
+                'transition-property': 'background-color, line-color, target-arrow-color',
+                'transition-duration': '0.5s'
+              }),
+
+        
+
+          layout: {
+            name: 'cose',
+            directed: true,
+            roots: '#v1',
+            padding: 30
+          }
+        });
+    
+    var cykruskal = cytoscape({
+          container: document.getElementById('cykruskal'),
+
+          style: cytoscape.stylesheet()
+            .selector('node')
+              .css({
+                'content': 'data(id)'
+              })
+            .selector('edge')
+              .css({
+                'target-arrow-shape': 'none',
+                'width': 1,
+                'line-color': '#ddd',
+                  'line-style': 'dashed',
+                'target-arrow-color': '#ddd'
+              })
+            .selector('.highlighted')
+              .css({
+                'background-color': '#61bffc',
+                'line-color': '#61bffc',
+                  'width': 3,
+                  'line-style': 'solid',
+                'target-arrow-color': '#61bffc',
+                'transition-property': 'background-color, line-color, target-arrow-color',
+                'transition-duration': '0.5s'
+              }),
+
+        
+
+          layout: {
+            name: 'cose',
+            directed: true,
+            roots: '#v1',
+            padding: 30
+          }
+        });
     
     /*
     var bfs = cy.elements().bfs('#v1', function(){}, true);
@@ -105,9 +180,9 @@ $(document).ready(function(){
         var xedge = {};
         var in1 = $("#inNode").val().split(' ');
         for(var i =0; i < in1.length; i++){
-            cy.add([
-              { group: "nodes", data: { id: in1[i] }  }
-            ]);
+            cy.add([{ group: "nodes", data: { id: in1[i] }  }]);
+            cyprim.add([ { group: "nodes", data: { id: in1[i] }  }]);
+            cykruskal.add([ { group: "nodes", data: { id: in1[i] }  }]);
             map[in1[i]] = {};
             
         }
@@ -116,15 +191,18 @@ $(document).ready(function(){
         var in2 = $("#inEdge").val().split('\n');
         for(i =0; i < in2.length; i++){
             var tmp = in2[i].split(' ')
-            cy.add([
-                { group: "edges", data: { id: tmp[0], weight: tmp[1], source: tmp[2], target: tmp[3] } }
-            ]);
+            cy.add([{ group: "edges", data: { id: tmp[0],  weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
+            
+            cyprim.add([{ group: "edges", data: { id: tmp[0], weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
+            cykruskal.add([{ group: "edges", data: { id: tmp[0], weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
             //map.set(xnode[tmp[2]], {tmp[3],tmp[1]});
             if(x[tmp[2]]==null){ x[tmp[2]] = ''; }
             x[tmp[2]] += tmp[3]+'-'+tmp[1]+',';
             
         }
         cy.layout().fit();
+        cyprim.layout().fit();
+        
         
         var keys = Object.keys(x);
         for(i =0; i < keys.length; i++){
@@ -139,22 +217,43 @@ $(document).ready(function(){
         
         //1) dijkstra();
         
-        console.log(map);
+        //console.log(map);
         //var map = {a:{b:3,c:1},b:{a:2,c:1},c:{a:4,b:1}};
         graph = new Graph(map);
-        console.log(graph.findShortestPath('v1', 'v6'));
-        var dijres = graph.findShortestPath('v1', 'v6');
+        
+        var dijres = graph.findShortestPath($('#inStart').val(), $('#inEnd').val());
+        //console.log(dijres);
         
         var path = new Array;
         for(i =0; i < dijres.length-1; i++){
             path[i] = '#'+dijres[i]+dijres[i+1];
         }
-        console.log(path);
+        //console.log(path);
         cy.$(path.join()).addClass('highlighted');
         
         
         //2) prim();
+        /*
+        var primres = graph.prim();
+        path = new Array;
+        for(i =0; i < primres.length-1; i++){
+            path[i] = '#'+primres[i]+primres[i+1];
+        }
+        cyprim.$(path.join()).addClass('highlighted');
+        
+        
+        console.log('prim path: '+primres);
+        */
+        
         //3) kruskal();
+        var resk = cy.elements().kruskal().edges();
+        var pathk = new Array;
+        for(i =0; i < resk.length; i++){
+            pathk[i] = '#'+resk[i].data('id');
+        }
+        //console.log(path);
+        cykruskal.$(pathk.join()).addClass('highlighted');
+        cykruskal.layout().fit();
      }); 
         
 }); // on dom ready

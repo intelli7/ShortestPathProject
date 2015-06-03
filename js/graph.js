@@ -139,6 +139,86 @@ var Graph = (function (undefined) {
 			return findShortestPath(map, toArray(arguments, 1));
 		}
 	}
+    
+    var prim = function (map,nodes) {
+        var path = [];
+        var visitied = {};
+        visited[nodes.shift] = true;
+        
+        
+        while (nodes.length) {
+			end = nodes.shift();
+			predecessors = findPaths(map, start, end);
+
+			if (predecessors) {
+				shortest = extractShortest(predecessors, end);
+				if (nodes.length) {
+					path.push.apply(path, shortest.slice(0, -1));
+				} else {
+					return path.concat(shortest);
+				}
+			} else {
+				return null;
+			}
+
+			start = end;
+		}
+        
+    }
+    
+    Graph.prototype.prim = function (){
+        
+        var mm = this.map;
+        var keys = extractKeys(mm)
+        keys.sort(sorter);
+        
+        var result = [];
+        var respath = [];
+        var usedNodes = {};
+
+        function findMin(mm) {
+            var min = [999999,null,null];
+            //var adjlist = mm[node];
+            for(var i=0;i<result.length;i++){ 
+                var adjlist = mm[result[i]];
+                if(result[i]==null) break;
+                Object.getOwnPropertyNames(adjlist).forEach(function(val, idx, array) {
+                    //console.log(val);
+                    var tmplength= parseInt(adjlist[val]);
+                    
+                    if(tmplength < min[0] && usedNodes[val] === undefined){
+                        min = [tmplength, val, result[i]];
+                    }
+                    //console.log(min+' '+usedNodes[val]);
+                });
+            }
+            console.log('return '+min);
+            return min;
+        }
+
+        // Pick random start point
+        //var node = keys[0];
+        var node = keys[Math.round(Math.random()*(keys.length-1))];;
+        //console.log('start node:'+node);
+        result.push(node);
+        usedNodes[node] = true;
+
+        var min = findMin(mm);
+        while(min != null) {
+            //console.log(usedNodes);
+            result.push(min[1]);
+            usedNodes[min[1]] = true;
+            if(min[1] != result[0]){
+                respath.push('#'+min[2]+min[1]);
+            }
+            
+            min = findMin(mm);
+            
+            
+        }
+
+        return respath;
+    }
 
 	return Graph;
 
