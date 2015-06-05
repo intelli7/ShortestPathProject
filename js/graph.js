@@ -228,6 +228,66 @@ var Graph = (function (undefined) {
         console.log(respath);
         return respath;
     }
+    
+    Graph.prototype.kruskal = function (){
+        console.log('start kruskal: mm=>');
+        var mm = this.map;
+        
+        var keys = extractKeys(mm)
+        console.log(keys);
+        
+        var sortededge = {};
+        for(var node in mm) {
+            //console.log('node:'+node);
+            var forest = mm[node];
+            
+            var dest = extractKeys(forest);
+            for(var i = 0; i<dest.length;i++){
+                   sortededge[forest[dest[i]]+node+dest[i]] = {source:node,dest:dest[i]};
+            }
+            
+        }
+        
+        var sortededgekey = extractKeys(sortededge);
+        sortededgekey.sort(sorter);
+        
+        var acceptededge = {};
+        var result = [];
+        var connected = [];
+        for(var i = 0; i<sortededgekey.length;i++){
+            var ed = sortededge[sortededgekey[i]];
+            console.log(sortededgekey[i]);
+            var tmp1 =ed.source+ed.dest;
+            var tmp2 =ed.dest+ed.source;
+            var xx = extractKeys(acceptededge);
+            console.log(xx.length +' < ' + (keys.length-1)*2);
+            if(acceptededge[tmp1] === undefined && 
+               (
+                !( connected.indexOf(ed.source)>-1 && connected.indexOf(ed.dest)>-1 ) || 
+                xx.length<(keys.length-1)*2)
+              )
+            {
+                
+                //TODO: bug lagi ... masih belum jadi complete BTree
+                //kena check dulu if cycluc(source,dest)?..
+                
+                acceptededge[tmp1] = true;   acceptededge[tmp2] = true; 
+                result.push('#'+tmp1);
+                result.push('#'+tmp2);
+                connected.push(ed.source);  connected.push(ed.dest);
+                console.log('#'+tmp1);
+                
+            }
+        }
+        
+        
+        
+        
+        console.log(result);
+        return result;
+        
+        
+    }
 
 	return Graph;
 

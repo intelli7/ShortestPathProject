@@ -190,6 +190,10 @@ $(document).ready(function(){
                   'line-style': 'dashed',
                 'target-arrow-color': '#ddd'
               })
+            .selector('.hidden')
+              .css({
+                  'display': 'none'
+              })
             .selector('.highlighted')
               .css({
                 'background-color': '#61bffc',
@@ -235,10 +239,11 @@ $(document).ready(function(){
             
             cy.add([{ group: "edges", data: { id: tmp[0],  weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
             
-            cyprim.add([{ group: "edges", data: { id: idedge1, weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
-            cyprim.add([{ group: "edges",classes: 'hidden', data: { id: idedge2, weight: tmp[1], source: tmp[3], target: tmp[2] } }]);
+               cyprim.add([{ group: "edges", data: { id: idedge1, weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
+               cyprim.add([{ group: "edges",classes: 'hidden', data: { id: idedge2, weight: tmp[1], source: tmp[3], target: tmp[2] } }]);
             
-            cykruskal.add([{ group: "edges", data: { id: tmp[0], weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
+            cykruskal.add([{ group: "edges", data: { id: idedge1, weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
+            cykruskal.add([{ group: "edges",classes: 'hidden', data: { id: idedge2, weight: tmp[1], source: tmp[3], target: tmp[2] } }]);
             //map.set(xnode[tmp[2]], {tmp[3],tmp[1]});
             
             if(objedge[tmp[2]]==null){ 
@@ -286,7 +291,7 @@ $(document).ready(function(){
         
         */
         //2) prim();
-        
+        /*
         var primres = graph.prim();
         
         cyprim.$(primres.join()).addClass('highlighted');
@@ -294,9 +299,10 @@ $(document).ready(function(){
         
         console.log('prim path: '+primres);
         
-        
+        */
         //3) kruskal();
         
+        /*
         var resk = cy.elements().kruskal().edges();
         var pathk = new Array;
         for(i =0; i < resk.length; i++){
@@ -304,6 +310,9 @@ $(document).ready(function(){
         }
         //console.log(path);
         cykruskal.$(pathk.join()).addClass('highlighted');
+        */
+        var kruskalres = graph.kruskal();
+        cykruskal.$(kruskalres.join()).addClass('highlighted');
         cykruskal.layout().fit();
         
      }); 
