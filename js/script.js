@@ -20,7 +20,54 @@ var app = angular.module('myApp', []);
 $(document).ready(function(){
     $.material.init(); 
     
-    var cy = cytoscape({
+    
+    
+    /*
+    var bfs = cy.elements().bfs('#v1', function(){}, true);
+
+    var i = 0;
+    var highlightNextEle = function(){
+      bfs.path[i].addClass('highlighted');
+
+      if( i < bfs.path.length ){
+        i++;
+        setTimeout(highlightNextEle, 1000);
+      }
+    };
+
+    // kick off first highlight
+    highlightNextEle();
+    
+    
+    
+    */
+
+    $("#inNode").val('v1 v2 v3 v4 v5 v6 v7');
+    
+    var edgehtml = '';
+    edgehtml += 'v1v2 2 v1 v2 \n';
+    edgehtml += 'v1v4 1 v1 v4 \n';
+    edgehtml += 'v2v4 3 v2 v4 \n';
+    edgehtml += 'v2v5 10 v2 v5 \n';
+    edgehtml += 'v3v1 4 v3 v1 \n';
+    edgehtml += 'v3v6 5 v3 v6 \n';
+    edgehtml += 'v4v3 2 v4 v3 \n';
+    edgehtml += 'v4v6 8 v4 v6 \n';
+    edgehtml += 'v4v7 4 v4 v7 \n';
+    edgehtml += 'v4v5 2 v4 v5 \n';
+    edgehtml += 'v5v7 6 v5 v7 \n';
+    edgehtml += 'v7v6 1 v7 v6';
+  
+
+    $("#inEdge").val(edgehtml);
+    $("#inStart").val('v1');
+    $("#inEnd").val('v7');
+    
+    
+    $('#btnSubmitDij').click(function(){
+        //cyprim.destroy();
+        
+        var cy = cytoscape({
           container: document.getElementById('cy'),
 
           style: cytoscape.stylesheet()
@@ -89,8 +136,14 @@ $(document).ready(function(){
                 'width': 1,
                 'line-color': '#ddd',
                   'line-style': 'dashed',
-                'target-arrow-color': '#ddd'
+                'target-arrow-color': '#ddd',
+                  
               })
+            .selector('.hidden')
+              .css({
+                  'display': 'none'
+              })
+        
             .selector('.highlighted')
               .css({
                 'background-color': '#61bffc',
@@ -99,7 +152,9 @@ $(document).ready(function(){
                   'line-style': 'solid',
                 'target-arrow-color': '#61bffc',
                 'transition-property': 'background-color, line-color, target-arrow-color',
-                'transition-duration': '0.5s'
+                'transition-duration': '0.5s',
+                  'display': 'block'
+                  
               }),
 
         
@@ -155,50 +210,7 @@ $(document).ready(function(){
             padding: 30
           }
         });
-    
-    /*
-    var bfs = cy.elements().bfs('#v1', function(){}, true);
-
-    var i = 0;
-    var highlightNextEle = function(){
-      bfs.path[i].addClass('highlighted');
-
-      if( i < bfs.path.length ){
-        i++;
-        setTimeout(highlightNextEle, 1000);
-      }
-    };
-
-    // kick off first highlight
-    highlightNextEle();
-    
-    
-    
-    */
-
-    $("#inNode").val('v1 v2 v3 v4 v5 v6 v7');
-    
-    var edgehtml = '';
-    edgehtml += 'v1v2 2 v1 v2 \n';
-    edgehtml += 'v1v4 1 v1 v4 \n';
-    edgehtml += 'v2v4 3 v2 v4 \n';
-    edgehtml += 'v2v5 10 v2 v5 \n';
-    edgehtml += 'v3v1 4 v3 v1 \n';
-    edgehtml += 'v3v6 5 v3 v6 \n';
-    edgehtml += 'v4v3 2 v4 v3 \n';
-    edgehtml += 'v4v6 8 v4 v6 \n';
-    edgehtml += 'v4v7 4 v4 v7 \n';
-    edgehtml += 'v4v5 2 v4 v5 \n';
-    edgehtml += 'v5v7 6 v5 v7 \n';
-    edgehtml += 'v7v6 1 v7 v6';
-  
-
-    $("#inEdge").val(edgehtml);
-    $("#inStart").val('v1');
-    $("#inEnd").val('v7');
-    
-    
-    $('#btnSubmitDij').click(function(){
+        
         
         var map = {};
         
@@ -212,27 +224,41 @@ $(document).ready(function(){
             
         }
         
-        var x = {};
+        var objedge = {};
         var in2 = $("#inEdge").val().split('\n');
         for(i =0; i < in2.length; i++){
-            var tmp = in2[i].split(' ')
+    
+            var tmp = in2[i].split(' ');
+            var idedge1 = tmp[2]+tmp[3];
+            var idedge2 = tmp[3]+tmp[2];
+            
+            
             cy.add([{ group: "edges", data: { id: tmp[0],  weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
             
-            cyprim.add([{ group: "edges", data: { id: tmp[0], weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
+            cyprim.add([{ group: "edges", data: { id: idedge1, weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
+            cyprim.add([{ group: "edges",classes: 'hidden', data: { id: idedge2, weight: tmp[1], source: tmp[3], target: tmp[2] } }]);
+            
             cykruskal.add([{ group: "edges", data: { id: tmp[0], weight: tmp[1], source: tmp[2], target: tmp[3] } }]);
             //map.set(xnode[tmp[2]], {tmp[3],tmp[1]});
-            if(x[tmp[2]]==null){ x[tmp[2]] = ''; }
-            x[tmp[2]] += tmp[3]+'-'+tmp[1]+',';
+            
+            if(objedge[tmp[2]]==null){ 
+                objedge[tmp[2]] = ''; 
+            }
+            if(objedge[tmp[3]]==null){ 
+                objedge[tmp[3]] = ''; 
+            }
+            objedge[tmp[2]] += tmp[3]+'-'+tmp[1]+',';
+            objedge[tmp[3]] += tmp[2]+'-'+tmp[1]+',';
             
         }
         cy.layout().fit();
         cyprim.layout().fit();
         
         
-        var keys = Object.keys(x);
+        var keys = Object.keys(objedge);
         for(i =0; i < keys.length; i++){
             var tmpmap = {};
-            var inn = x[keys[i]].split(",");
+            var inn = objedge[keys[i]].split(",");
             for(var k =0; k < inn.length-1; k++){
                 tmpt = inn[k].split('-')
                 tmpmap[tmpt[0]] = tmpt[1];   
@@ -246,6 +272,8 @@ $(document).ready(function(){
         //var map = {a:{b:3,c:1},b:{a:2,c:1},c:{a:4,b:1}};
         graph = new Graph(map);
         
+        
+        /*
         var dijres = graph.findShortestPath($('#inStart').val(), $('#inEnd').val());
         //console.log(dijres);
         
@@ -256,21 +284,19 @@ $(document).ready(function(){
         //console.log(path);
         cy.$(path.join()).addClass('highlighted');
         
-        
+        */
         //2) prim();
-        /*
-        var primres = graph.prim();
-        path = new Array;
-        for(i =0; i < primres.length-1; i++){
-            path[i] = '#'+primres[i]+primres[i+1];
-        }
-        cyprim.$(path.join()).addClass('highlighted');
         
+        var primres = graph.prim();
+        
+        cyprim.$(primres.join()).addClass('highlighted');
+        cyprim.layout().fit();
         
         console.log('prim path: '+primres);
-        */
+        
         
         //3) kruskal();
+        
         var resk = cy.elements().kruskal().edges();
         var pathk = new Array;
         for(i =0; i < resk.length; i++){
@@ -279,6 +305,7 @@ $(document).ready(function(){
         //console.log(path);
         cykruskal.$(pathk.join()).addClass('highlighted');
         cykruskal.layout().fit();
+        
      }); 
         
 }); // on dom ready

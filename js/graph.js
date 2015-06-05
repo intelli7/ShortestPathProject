@@ -167,8 +167,10 @@ var Graph = (function (undefined) {
     }
     
     Graph.prototype.prim = function (){
-        
+        console.log('start prim: mm=>');
         var mm = this.map;
+        console.log(mm);
+        
         var keys = extractKeys(mm)
         keys.sort(sorter);
         
@@ -182,41 +184,48 @@ var Graph = (function (undefined) {
             for(var i=0;i<result.length;i++){ 
                 var adjlist = mm[result[i]];
                 if(result[i]==null) break;
+                
                 Object.getOwnPropertyNames(adjlist).forEach(function(val, idx, array) {
                     //console.log(val);
                     var tmplength= parseInt(adjlist[val]);
                     
+                    //console.log(val+' '+usedNodes[val]);
                     if(tmplength < min[0] && usedNodes[val] === undefined){
                         min = [tmplength, val, result[i]];
                     }
-                    //console.log(min+' '+usedNodes[val]);
+                    
                 });
             }
-            console.log('return '+min);
+            //console.log('return '+min);
             return min;
         }
 
         // Pick random start point
         //var node = keys[0];
-        var node = keys[Math.round(Math.random()*(keys.length-1))];;
-        //console.log('start node:'+node);
+        var node = keys[Math.round(Math.random()*(keys.length-1))];
+        
+        console.log('start node:'+node);
         result.push(node);
         usedNodes[node] = true;
 
         var min = findMin(mm);
-        while(min != null) {
-            //console.log(usedNodes);
+        
+        
+        while(min[1] != null) {
+            console.log(min);
             result.push(min[1]);
             usedNodes[min[1]] = true;
             if(min[1] != result[0]){
                 respath.push('#'+min[2]+min[1]);
+                respath.push('#'+min[1]+min[2]);
             }
             
             min = findMin(mm);
             
             
         }
-
+        console.log('end prim: result');
+        console.log(respath);
         return respath;
     }
 
