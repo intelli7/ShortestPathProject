@@ -106,13 +106,26 @@ function union(x,y)
 	result.edge = A;
     result.vertices = grafo.vertices;
     
+    $('#kruskal_console').append('<div class="jquery-console-prompt-box"><span class="jquery-console-prompt-label">Kruskal &gt;</span><span class="jquery-console-prompt"></span></div>');
+
     
-    
+    var tcost = 0;
     var output = [];
+    
+    var consolepath = [];
+    
+    
     for(i = 0;i<result.edge.length;i++){
         output.push('#'+result.edge[i][0]+result.edge[i][1]);
         output.push('#'+result.edge[i][1]+result.edge[i][0]);
+        
+        consolepath.push(result.edge[i][0]+result.edge[i][1]);
+        tcost += mm[result.edge[i][0]][result.edge[i][1]];
     }
+    
+    $('#kruskal_console').append('<div class="jquery-console-message jquery-console-message-value">PATH =&gt; '+consolepath.join(' > ')+'</div>');
+    $('#kruskal_console').append('<div class="jquery-console-message jquery-console-message-value">COST =&gt; '+tcost+'</div>');
+
     //console.log(output);
 	return output;
 }

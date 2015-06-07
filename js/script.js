@@ -268,7 +268,7 @@ $(document).ready(function(){
             var inn = objedge[keys[i]].split(",");
             for(var k =0; k < inn.length-1; k++){
                 tmpt = inn[k].split('-')
-                tmpmap[tmpt[0]] = tmpt[1];   
+                tmpmap[tmpt[0]] = parseFloat(tmpt[1]);   
             }
             map[keys[i]] = tmpmap;
         }
@@ -294,14 +294,22 @@ $(document).ready(function(){
         
         
         //1) dijkstra();
+        $('#dij_console').append('<div class="jquery-console-prompt-box"><span class="jquery-console-prompt-label">Dijkstra &gt;</span><span class="jquery-console-prompt"> Start: '+$('#inStart').val()+' End '+$('#inEnd').val()+'</span></div>');
         
         var dijres = graphdij.findShortestPath($('#inStart').val(), $('#inEnd').val());
         //console.log(dijres);
         
         var path = new Array;
+        var tcost = 0;
         for(i =0; i < dijres.length-1; i++){
             path[i] = '#'+dijres[i]+dijres[i+1];
+            tcost += mapdij[dijres[i]][dijres[i+1]];
         }
+        
+        $('#dij_console').append('<div class="jquery-console-message jquery-console-message-value">PATH =&gt; '+dijres.join(' > ')+'</div>');
+        $('#dij_console').append('<div class="jquery-console-message jquery-console-message-value">COST =&gt; '+tcost+'</div>');
+
+        
         //console.log(path);
         cy.$(path.join()).addClass('highlighted');
         cy.layout().fit();

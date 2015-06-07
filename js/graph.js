@@ -138,6 +138,7 @@ var Graph = (function (undefined) {
         
         var result = [];
         var respath = [];
+        var consolepath = [];
         var usedNodes = {};
 
         function findMin(mm) {
@@ -165,27 +166,37 @@ var Graph = (function (undefined) {
         // Pick random start point
         //var node = keys[0];
         var node = keys[Math.round(Math.random()*(keys.length-1))];
-        
+        $('#prim_console').append('<div class="jquery-console-prompt-box"><span class="jquery-console-prompt-label">Prim &gt;</span><span class="jquery-console-prompt"> Random Start: '+node+'</span></div>');
+
         //console.log('start node:'+node);
         result.push(node);
         usedNodes[node] = true;
 
         var min = findMin(mm);
         
-        
+        var tcost = 0;
         while(min[1] != null) {
             //console.log(min);
             result.push(min[1]);
             usedNodes[min[1]] = true;
             if(min[1] != result[0]){
+                //result.push(min[0]);
+                tcost += mm[min[2]][min[1]];
+                
                 respath.push('#'+min[2]+min[1]);
                 respath.push('#'+min[1]+min[2]);
+                
+                consolepath.push(min[2]+min[1]);
             }
             
             min = findMin(mm);
             
             
         }
+        
+        $('#prim_console').append('<div class="jquery-console-message jquery-console-message-value">PATH =&gt; '+consolepath.join(' > ')+'</div>');
+        $('#prim_console').append('<div class="jquery-console-message jquery-console-message-value">COST =&gt; '+tcost+'</div>');
+
         //console.log('end prim: result');
         //console.log(respath);
         return respath;
