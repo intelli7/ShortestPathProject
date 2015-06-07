@@ -53,7 +53,7 @@ $(document).ready(function(){
     edgehtml += 'v3v6 5 v3 v6 \n';
     edgehtml += 'v4v3 2 v4 v3 \n';
     edgehtml += 'v4v6 8 v4 v6 \n';
-    edgehtml += 'v4v7 4 v4 v7 \n';
+    edgehtml += 'v4v7 40 v4 v7 \n';
     edgehtml += 'v4v5 2 v4 v5 \n';
     edgehtml += 'v5v7 6 v5 v7 \n';
     edgehtml += 'v7v6 1 v7 v6';
@@ -229,6 +229,7 @@ $(document).ready(function(){
         }
         
         var objedge = {};
+        var objedgedij = {};
         var in2 = $("#inEdge").val().split('\n');
         for(i =0; i < in2.length; i++){
     
@@ -248,18 +249,19 @@ $(document).ready(function(){
             
             if(objedge[tmp[2]]==null){ 
                 objedge[tmp[2]] = ''; 
+                objedgedij[tmp[2]] = ''; 
             }
             if(objedge[tmp[3]]==null){ 
                 objedge[tmp[3]] = ''; 
+                objedgedij[tmp[3]] = ''; 
             }
             objedge[tmp[2]] += tmp[3]+'-'+tmp[1]+',';
+            objedgedij[tmp[2]] += tmp[3]+'-'+tmp[1]+',';
+            
             objedge[tmp[3]] += tmp[2]+'-'+tmp[1]+',';
             
         }
-        cy.layout().fit();
-        cyprim.layout().fit();
-        
-        
+       
         var keys = Object.keys(objedge);
         for(i =0; i < keys.length; i++){
             var tmpmap = {};
@@ -271,15 +273,29 @@ $(document).ready(function(){
             map[keys[i]] = tmpmap;
         }
         
-        //1) dijkstra();
         
+        
+        //console.log(objedgedij);
+        var mapdij = {};
+        var keys2 = Object.keys(objedgedij);
+        for(i =0; i < keys2.length; i++){
+            var tmpmap = {};
+            var inn = objedgedij[keys2[i]].split(",");
+            for(var k =0; k < inn.length-1; k++){
+                tmpt = inn[k].split('-')
+                tmpmap[tmpt[0]] = parseFloat(tmpt[1]);   
+            }
+            mapdij[keys2[i]] = tmpmap;
+        }
         //console.log(map);
         //var map = {a:{b:3,c:1},b:{a:2,c:1},c:{a:4,b:1}};
+        graphdij = new Graph(mapdij);
         graph = new Graph(map);
         
         
-        /*
-        var dijres = graph.findShortestPath($('#inStart').val(), $('#inEnd').val());
+        //1) dijkstra();
+        
+        var dijres = graphdij.findShortestPath($('#inStart').val(), $('#inEnd').val());
         //console.log(dijres);
         
         var path = new Array;
@@ -288,30 +304,21 @@ $(document).ready(function(){
         }
         //console.log(path);
         cy.$(path.join()).addClass('highlighted');
+        cy.layout().fit();
         
-        */
         //2) prim();
-        /*
+        
         var primres = graph.prim();
         
         cyprim.$(primres.join()).addClass('highlighted');
         cyprim.layout().fit();
         
-        console.log('prim path: '+primres);
+        //console.log('prim path: '+primres);
         
-        */
+        
         //3) kruskal();
         
-        /*
-        var resk = cy.elements().kruskal().edges();
-        var pathk = new Array;
-        for(i =0; i < resk.length; i++){
-            pathk[i] = '#'+resk[i].data('id');
-        }
-        //console.log(path);
-        cykruskal.$(pathk.join()).addClass('highlighted');
-        */
-        var kruskalres = graph.kruskal();
+        var kruskalres = Kruskal(graph);
         cykruskal.$(kruskalres.join()).addClass('highlighted');
         cykruskal.layout().fit();
         

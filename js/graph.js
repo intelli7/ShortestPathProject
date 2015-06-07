@@ -13,7 +13,9 @@ var Graph = (function (undefined) {
 	}
 
 	var findPaths = function (map, start, end, infinity) {
-		infinity = infinity || Infinity;
+        //console.log('start findpaths: '+start+' , '+end)
+		
+        infinity = infinity || Infinity;
 
 		var costs = {},
 		    open = {'0': [start]},
@@ -33,20 +35,29 @@ var Graph = (function (undefined) {
 
 			keys.sort(sorter);
 
+            //console.log(keys);
+            
 			var key = keys[0],
 			    bucket = open[key],
 			    node = bucket.shift(),
 			    currentCost = parseFloat(key),
 			    adjacentNodes = map[node] || {};
 
-			if (!bucket.length) delete open[key];
+            //console.log('key:'+key+' ,bucket:'+bucket+' ,node:'+node+' ,currentCost:'+currentCost+' ,adjacentNodes:');
+            //console.log(adjacentNodes);
+			if (!bucket.length){
+                //console.log('delete open[key]');
+                //console.log(open[key]);
+                delete open[key];
+            }
 
 			for (var vertex in adjacentNodes) {
+                //console.log('for every vertex'+vertex);
 			    if (Object.prototype.hasOwnProperty.call(adjacentNodes, vertex)) {
 					var cost = adjacentNodes[vertex],
 					    totalCost = cost + currentCost,
 					    vertexCost = costs[vertex];
-
+                    //console.log('cost'+cost+' ,totalCost'+totalCost+' ,vertexCost'+vertexCost);
 					if ((vertexCost === undefined) || (vertexCost > totalCost)) {
 						costs[vertex] = totalCost;
 						addToOpen(totalCost, vertex);
@@ -104,72 +115,23 @@ var Graph = (function (undefined) {
 		}
 	}
 
-	var toArray = function (list, offset) {
-		try {
-			return Array.prototype.slice.call(list, offset);
-		} catch (e) {
-			var a = [];
-			for (var i = offset || 0, l = list.length; i < l; ++i) {
-				a.push(list[i]);
-			}
-			return a;
-		}
-	}
+	
 
 	var Graph = function (map) {
 		this.map = map;
 	}
 
 	Graph.prototype.findShortestPath = function (start, end) {
-		if (Object.prototype.toString.call(start) === '[object Array]') {
-			return findShortestPath(this.map, start);
-		} else if (arguments.length === 2) {
-			return findShortestPath(this.map, [start, end]);
-		} else {
-			return findShortestPath(this.map, toArray(arguments));
-		}
+        //console.log(this.map);
+        return findShortestPath(this.map, [start, end]);
 	}
 
-	Graph.findShortestPath = function (map, start, end) {
-		if (Object.prototype.toString.call(start) === '[object Array]') {
-			return findShortestPath(map, start);
-		} else if (arguments.length === 3) {
-			return findShortestPath(map, [start, end]);
-		} else {
-			return findShortestPath(map, toArray(arguments, 1));
-		}
-	}
-    
-    var prim = function (map,nodes) {
-        var path = [];
-        var visitied = {};
-        visited[nodes.shift] = true;
-        
-        
-        while (nodes.length) {
-			end = nodes.shift();
-			predecessors = findPaths(map, start, end);
-
-			if (predecessors) {
-				shortest = extractShortest(predecessors, end);
-				if (nodes.length) {
-					path.push.apply(path, shortest.slice(0, -1));
-				} else {
-					return path.concat(shortest);
-				}
-			} else {
-				return null;
-			}
-
-			start = end;
-		}
-        
-    }
+	
     
     Graph.prototype.prim = function (){
-        console.log('start prim: mm=>');
+        //console.log('start prim: mm=>');
         var mm = this.map;
-        console.log(mm);
+        //console.log(mm);
         
         var keys = extractKeys(mm)
         keys.sort(sorter);
@@ -204,7 +166,7 @@ var Graph = (function (undefined) {
         //var node = keys[0];
         var node = keys[Math.round(Math.random()*(keys.length-1))];
         
-        console.log('start node:'+node);
+        //console.log('start node:'+node);
         result.push(node);
         usedNodes[node] = true;
 
@@ -212,7 +174,7 @@ var Graph = (function (undefined) {
         
         
         while(min[1] != null) {
-            console.log(min);
+            //console.log(min);
             result.push(min[1]);
             usedNodes[min[1]] = true;
             if(min[1] != result[0]){
@@ -224,71 +186,12 @@ var Graph = (function (undefined) {
             
             
         }
-        console.log('end prim: result');
-        console.log(respath);
+        //console.log('end prim: result');
+        //console.log(respath);
         return respath;
     }
     
-    Graph.prototype.kruskal = function (){
-        console.log('start kruskal: mm=>');
-        var mm = this.map;
-        
-        var keys = extractKeys(mm)
-        console.log(keys);
-        
-        var sortededge = {};
-        for(var node in mm) {
-            //console.log('node:'+node);
-            var forest = mm[node];
-            
-            var dest = extractKeys(forest);
-            for(var i = 0; i<dest.length;i++){
-                   sortededge[forest[dest[i]]+node+dest[i]] = {source:node,dest:dest[i]};
-            }
-            
-        }
-        
-        var sortededgekey = extractKeys(sortededge);
-        sortededgekey.sort(sorter);
-        
-        var acceptededge = {};
-        var result = [];
-        var connected = [];
-        for(var i = 0; i<sortededgekey.length;i++){
-            var ed = sortededge[sortededgekey[i]];
-            console.log(sortededgekey[i]);
-            var tmp1 =ed.source+ed.dest;
-            var tmp2 =ed.dest+ed.source;
-            var xx = extractKeys(acceptededge);
-            console.log(xx.length +' < ' + (keys.length-1)*2);
-            if(acceptededge[tmp1] === undefined && 
-               (
-                !( connected.indexOf(ed.source)>-1 && connected.indexOf(ed.dest)>-1 ) || 
-                xx.length<(keys.length-1)*2)
-              )
-            {
-                
-                //TODO: bug lagi ... masih belum jadi complete BTree
-                //kena check dulu if cycluc(source,dest)?..
-                
-                acceptededge[tmp1] = true;   acceptededge[tmp2] = true; 
-                result.push('#'+tmp1);
-                result.push('#'+tmp2);
-                connected.push(ed.source);  connected.push(ed.dest);
-                console.log('#'+tmp1);
-                
-            }
-        }
-        
-        
-        
-        
-        console.log(result);
-        return result;
-        
-        
-    }
-
+    
 	return Graph;
 
 })();
