@@ -8,13 +8,13 @@ var Kruskal = function(_mm)
     
 //var mm=_mm.map;
 var mm=_mm.map;
-var grafo = {};
+var graph = {};
 
     
 var A = [];
 var pi = {};
 var rank = {};
-var indiceInvertido = [];
+var sortededge = [];
 
 var result = {};
 
@@ -23,9 +23,9 @@ var result = {};
 function initgraph(){
     
     var keys = Object.keys(mm);
-    grafo['vertices'] = keys;
-    grafo['edge'] = [];
-    //console.log(grafo);
+    graph['vertices'] = keys;
+    graph['edge'] = [];
+    //console.log(graph);
     for(var node in mm) {
         var forest = mm[node];
         var dest = Object.keys(forest);
@@ -34,7 +34,7 @@ function initgraph(){
                //sortededge[forest[dest[i]]+node+dest[i]] = {source:node,dest:dest[i]};
                 tmpx = [node,dest[i],forest[dest[i]]];
                 //console.log('push: '+tmpx);
-                grafo['edge'].push(tmpx);
+                graph['edge'].push(tmpx);
         }
     }
 }
@@ -72,39 +72,39 @@ function union(x,y)
 
     initgraph();
 
-	for(var i=0;i<grafo.vertices.length;i++){
-        //console.log('makeset'+grafo.vertices[i]);
-		make_set(grafo.vertices[i]);
+	for(var i=0;i<graph.vertices.length;i++){
+        //console.log('makeset'+graph.vertices[i]);
+		make_set(graph.vertices[i]);
     }
-    //console.log(grafo);
+    //console.log(graph);
     
-    for(var i in grafo.edge)
+    for(var i in graph.edge)
     {
-        if(!indiceInvertido[grafo.edge[i][2]])
-            indiceInvertido[grafo.edge[i][2]] = [];
-        indiceInvertido[grafo.edge[i][2]].push(grafo.edge[i]);
+        if(!sortededge[graph.edge[i][2]])
+            sortededge[graph.edge[i][2]] = [];
+        sortededge[graph.edge[i][2]].push(graph.edge[i]);
     }
-    //console.log(indiceInvertido);
+    //console.log(sortededge);
     
     
-	for(var i in indiceInvertido)  //loop every sorted edges
+	for(var i in sortededge)  //loop every sorted edges
 	{
-        //console.log('start weight: '+indiceInvertido[i][0][2]);
-		for(var j in indiceInvertido[i]) //loop every same weight
+        //console.log('start weight: '+sortededge[i][0][2]);
+		for(var j in sortededge[i]) //loop every same weight
 		{
-            //console.log('start j0='+indiceInvertido[i][j][0]+' in j1='+indiceInvertido[i][j][1]);
+            //console.log('start j0='+sortededge[i][j][0]+' in j1='+sortededge[i][j][1]);
             var results = 'false';
-			if(find_set(indiceInvertido[i][j][0]) != find_set(indiceInvertido[i][j][1]))
+			if(find_set(sortededge[i][j][0]) != find_set(sortededge[i][j][1]))
 			{
                 results = 'accepted';
-				A.push(indiceInvertido[i][j])
-				union(indiceInvertido[i][j][0],find_set(indiceInvertido[i][j][1]));
+				A.push(sortededge[i][j])
+				union(sortededge[i][j][0],find_set(sortededge[i][j][1]));
 			}
             //console.log(results);
 		}
 	}
 	result.edge = A;
-    result.vertices = grafo.vertices;
+    result.vertices = graph.vertices;
     
     $('#kruskal_console').append('<div class="jquery-console-prompt-box"><span class="jquery-console-prompt-label">Kruskal &gt;</span><span class="jquery-console-prompt"></span></div>');
 
